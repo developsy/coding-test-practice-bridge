@@ -16,8 +16,10 @@ const InputView = {
   /**
    * 사용자가 이동할 칸을 입력받는다.
    */
-  readMoving() {
-    MissionUtils.Console.readLine("이동할 칸을 선택해주세요. (위: U, 아래: D)\n", (userInput) => {});
+  readMoving(callBack) {
+    MissionUtils.Console.readLine("이동할 칸을 선택해주세요. (위: U, 아래: D)\n", (userInput) => {
+      callBack(userInput);
+    });
   },
 
   /**
