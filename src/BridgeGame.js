@@ -6,12 +6,11 @@ class BridgeGame {
   #upperBridge = [];
   #lowerBridge = [];
   #gamePlayCount = 0;
-  #gameRound = 0;
+  #gameRound = 1;
   #isGameOver = false;
 
   setBridge(bridge) {
     this.#bridge = bridge;
-    console.log(this.#bridge);
   }
 
   get upperBridge() {
@@ -24,6 +23,10 @@ class BridgeGame {
 
   get gameOver() {
     return this.#isGameOver;
+  }
+
+  get gameRound() {
+    return this.#gameRound;
   }
   /**
    * 사용자가 칸을 이동할 때 사용하는 메서드
@@ -80,6 +83,9 @@ class BridgeGame {
   retry() {
     this.#isGameOver = false;
     this.#gamePlayCount = 0;
+    this.#gameRound += 1;
+    this.#lowerBridge = [];
+    this.#upperBridge = [];
   }
 }
 

@@ -7,6 +7,6 @@ class App {
   }
 }
 
-const app = new App();
-app.play();
+const aa = new App();
+aa.play();
 module.exports = App;

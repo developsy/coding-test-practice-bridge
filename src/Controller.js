@@ -1,5 +1,5 @@
 const { readBridgeSize, readGameCommand, readMoving } = require("./InputView");
-const { printMap, printResult } = require("./OutputView");
+const { printMap, printResult, printGreeting } = require("./OutputView");
 const { makeBridge } = require("./BridgeMaker");
 const { generate } = require("./BridgeRandomNumberGenerator");
 const BridgeGame = require("./BridgeGame");
@@ -10,6 +10,7 @@ class Controller {
   }
 
   start() {
+    printGreeting();
     this.#initializeBridge();
   }
 
@@ -24,25 +25,32 @@ class Controller {
 
   #moveOneBlock(command) {
     this.bridgeGame.move(command);
+    printMap(this.bridgeGame.upperBridge, this.bridgeGame.lowerBridge);
     this.#checkGameOver();
   }
 
   #checkGameOver() {
+    const CLEAR_VERIFICATION = (x, y) => x.find((x) => x === "X") || y.find((x) => x === "X");
+    const GAME_CLEAR = !CLEAR_VERIFICATION(this.bridgeGame.upperBridge, this.bridgeGame.lowerBridge);
     if (!this.bridgeGame.gameOver) {
       readMoving(this.#moveOneBlock.bind(this));
-      this.#printBridge(this.bridgeGame.upperBridge, this.bridgeGame.lowerBridge);
     }
-    if (this.bridgeGame.gameOver) {
-      this.#printBridge(this.bridgeGame.upperBridge, this.bridgeGame.lowerBridge);
-      this.bridgeGame.retry();
-    }
+    if (this.bridgeGame.gameOver && GAME_CLEAR) {
+      printResult([this.bridgeGame.upperBridge, this.bridgeGame.lowerBridge], GAME_CLEAR, this.bridgeGame.gameRound);
+    } else if (this.bridgeGame.gameOver && !GAME_CLEAR)
+      readGameCommand(this.#restartGame.bind(this), this.#endGame.bind(this));
   }
 
-  #printBridge(upperBridge, lowerBridge) {
-    printMap(upperBridge, lowerBridge);
+  #restartGame() {
+    this.bridgeGame.retry();
+    readMoving(this.#moveOneBlock.bind(this));
   }
 
-  #printResult() {}
+  #endGame() {
+    const CLEAR_VERIFICATION = (x, y) => x.find((x) => x === "X") || y.find((x) => x === "X");
+    const GAME_CLEAR = !CLEAR_VERIFICATION(this.bridgeGame.upperBridge, this.bridgeGame.lowerBridge);
+    printResult([this.bridgeGame.upperBridge, this.bridgeGame.lowerBridge], GAME_CLEAR, this.bridgeGame.gameRound);
+  }
 }
 
 module.exports = Controller;

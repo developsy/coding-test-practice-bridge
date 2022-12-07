@@ -9,6 +9,7 @@ const InputView = {
    */
   readBridgeSize(callBack) {
     MissionUtils.Console.readLine("다리의 길이를 입력해주세요.\n", (userInput) => {
+      MissionUtils.Console.print("");
       callBack(parseInt(userInput));
     });
   },
@@ -25,11 +26,11 @@ const InputView = {
   /**
    * 사용자가 게임을 다시 시도할지 종료할지 여부를 입력받는다.
    */
-  readGameCommand() {
-    MissionUtils.Console.readLine(
-      "게임을 다시 시도할지 여부를 입력해주세요. (재시도: R, 종료: Q)\n",
-      (userInput) => {}
-    );
+  readGameCommand(restartCallBack, endCallBack) {
+    MissionUtils.Console.readLine("\n게임을 다시 시도할지 여부를 입력해주세요. (재시도: R, 종료: Q)\n", (userInput) => {
+      if (userInput === "R") restartCallBack();
+      if (userInput === "Q") endCallBack();
+    });
   },
 };
 
